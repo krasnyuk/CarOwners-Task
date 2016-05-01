@@ -176,6 +176,7 @@
     <Compile Include="Models\CarOwner.cs" />
     <Compile Include="Models\CarOwnerContext.cs" />
     <Compile Include="Models\CarType.cs" />
+    <Compile Include="Models\CarViewModel.cs" />
     <Compile Include="Models\Owner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\Concrete\CarOwnerRepository.cs" />
@@ -197,6 +198,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Cars\Index.cshtml" />
     <Content Include="scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Cars\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
