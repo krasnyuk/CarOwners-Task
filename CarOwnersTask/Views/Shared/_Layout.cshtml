@@ -42,5 +42,17 @@
 
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/scripts/jquery-ui-1.11.4.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            if (!Modernizr.inputtypes.date) {
+                $(function () {
+                    $("input[type='date']")
+                                .datepicker({ dateFormat: 'dd/mm/yy' })
+                                .get(0).setAttribute("type", "text");
+                })
+            }
+        });
+    </script>
 </body>
 </html>

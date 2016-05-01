@@ -22,6 +22,8 @@ namespace CarOwnersTask.Models
 
         [Required(ErrorMessage = "Manufacturer is required!")]
         [Display(Name = "Year of manufacturing")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd'/'MM'/'yyyy}", ApplyFormatInEditMode = true)]
         public DateTime ManufactureYear { get; set; }
         
         public int CarTypeId { get; set; }
