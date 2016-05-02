@@ -21,7 +21,12 @@ namespace CarOwnersTask.Repository.Concrete
         {
             _db.CarOwners.Add(item);
         }
-
+        public void DeleteOwnerForCar(int carId, int ownerId)
+        {
+            CarOwner entry = _db.CarOwners.Where(x=>x.CarId==carId && x.OwnerId==ownerId).FirstOrDefault();
+            if (entry != null)
+                _db.CarOwners.Remove(entry);
+        }
         public void Delete(int id)
         {
             CarOwner entry = _db.CarOwners.Find(id);
@@ -29,7 +34,7 @@ namespace CarOwnersTask.Repository.Concrete
                 _db.CarOwners.Remove(entry);
         }
 
-        public CarOwner GetCar(int id)
+        public CarOwner GetCarOwner(int id)
         {
             return _db.CarOwners.Find(id);
         }

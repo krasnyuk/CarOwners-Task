@@ -1,4 +1,5 @@
 ﻿using CarOwnersTask.Models;
+using CarOwnersTask.Models.ViewModels;
 using CarOwnersTask.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -13,10 +14,14 @@ namespace CarOwnersTask.Controllers
     {
         private ICarRepository _carRepository;
         private ICarTypeRepository _carTypeRepository;
-        public CarsController(ICarRepository carRep, ICarTypeRepository carTypeRep)
+        private ICarOwnerRepository _carOwnerRepository;
+        private IOwnerRepository _ownerRepository;
+        public CarsController(ICarRepository carRep, ICarTypeRepository carTypeRep, ICarOwnerRepository carOwnRep, IOwnerRepository ownRep)
         {
             _carRepository = carRep;
             _carTypeRepository = carTypeRep;
+            _carOwnerRepository = carOwnRep;
+            _ownerRepository = ownRep;
         }
         public ActionResult Index()
         {
@@ -83,7 +88,7 @@ namespace CarOwnersTask.Controllers
                 return HttpNotFound();
             return View(car);
         }
-
+        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -92,6 +97,38 @@ namespace CarOwnersTask.Controllers
             _carRepository.Delete(id);
             _carRepository.Save();
             return RedirectToAction("Index");
+        }
+        public ActionResult DeleteOwner(int ownerId, int carId)
+        {
+            _carOwnerRepository.DeleteOwnerForCar(carId, ownerId);
+            _carOwnerRepository.Save();
+            return View("Index",_carRepository.Cars);
+        }
+        public ActionResult Owners(int id)
+        {
+            CarOwnerViewModel model = new CarOwnerViewModel
+            {
+                Owners = from u in _carOwnerRepository.CarOwners
+                        from inf in _ownerRepository.Owners
+                        where (u.OwnerId == inf.OwnerId && u.CarId == id)
+                        select inf,
+                CarId = id
+            };
+       
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult CreateOwnerForCar(int OwnerId, int carId)
+        {
+            CarOwner item = new CarOwner
+            {
+                OwnerId = OwnerId,
+                CarId = carId
+            };
+            _carOwnerRepository.Create(item);
+            _carOwnerRepository.Save();
+            
+            return RedirectToAction("Owners", new { id = carId});
         }
         public PartialViewResult NewCar()
         {
@@ -105,6 +142,22 @@ namespace CarOwnersTask.Controllers
 
 
             return PartialView("Create",car);
+        }
+        public PartialViewResult NewOwner(int carId)
+        {
+            CarOwnerViewModel model = new CarOwnerViewModel
+            {
+                CarId = carId,
+                Owners = from o in _ownerRepository.Owners
+                         select o,
+                list = from i in _ownerRepository.Owners
+                       select new SelectListItem
+                       {
+                           Text = i.FullName,
+                           Value = i.OwnerId.ToString()
+                       }
+            };
+            return PartialView("_CreateOwnerForCar", model);
         }
     }
 }

@@ -14,6 +14,14 @@ namespace CarOwnersTask.Models
         public DateTime BirthDate { get; set; }
         public double Experience { get; set; }
 
+        public string FullName
+        {
+            get
+            {
+                return LastName + " " + FirstName;
+            }
+        }
+
         //navigation property
         public virtual ICollection<CarOwner> CarOwners {get; set;}
     }
