@@ -10,7 +10,7 @@ namespace CarOwnersTask.Repository.Interfaces
     public interface IOwnerRepository
     {
         IEnumerable<Owner> Owners { get; }
-        Owner GetCar(int id);
+        Owner GetOwner(int id);
         void Create(Owner item);
         void Update(Owner item);
         void Delete(int id);

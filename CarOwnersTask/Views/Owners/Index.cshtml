@@ -1,0 +1,69 @@
+﻿@model IEnumerable<CarOwnersTask.Models.Owner>
+
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>List of owners </h2>
+
+<button type="button" class="btn btn-info btn-md"
+        data-toggle="modal" data-target="#myModal">
+    Add owner
+    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+</button>
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model=>model.FullName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BirthDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Experience)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BirthDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Experience)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { ownerId = item.OwnerId}, new { @class = "btn btn-warning" })
+                @Html.ActionLink("Cars", "Cars", new { ownerId = item.OwnerId }, new { @class = "btn btn-primary" })
+                @Html.ActionLink("Delete", "Delete", new { ownerId = item.OwnerId }, new { @class = "btn btn-danger" })
+            </td>
+        </tr>
+    }
+
+</table>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">New owner</h4>
+            </div>
+            <div class="modal-body">
+                @Html.Action("NewOwner")
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+

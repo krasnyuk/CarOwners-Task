@@ -10,8 +10,10 @@ using System.Web.Mvc;
 
 namespace CarOwnersTask.Controllers
 {
+    //Контроллер для машин
     public class CarsController : Controller
     {
+        //объекты для взаимодействия с репозиториями
         private ICarRepository _carRepository;
         private ICarTypeRepository _carTypeRepository;
         private ICarOwnerRepository _carOwnerRepository;
@@ -23,10 +25,12 @@ namespace CarOwnersTask.Controllers
             _carOwnerRepository = carOwnRep;
             _ownerRepository = ownRep;
         }
+        //главная страница со списком машин
         public ActionResult Index()
         {
             return View(_carRepository.Cars);
         }
+        //редактирование машины по ID
         public ActionResult Edit(int id)
         {
             CarViewModel model = new CarViewModel
@@ -43,6 +47,7 @@ namespace CarOwnersTask.Controllers
                 return HttpNotFound();
             return View(model);
         }
+        //Сохранения результатов редактирования POST-запросом
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(CarViewModel model, int CarTypeId)
@@ -50,7 +55,7 @@ namespace CarOwnersTask.Controllers
             if (ModelState.IsValid)
             {
                 var entry = _carRepository.GetCar(model.Car.CarId);
-                entry.CarTypeId = CarTypeId;
+                entry.CarTypeId = CarTypeId; //берём из drop-down list'a
                 entry.Brand = model.Car.Brand;
                 entry.Model = model.Car.Model;
                 entry.ManufactureYear = model.Car.ManufactureYear;
@@ -72,14 +77,16 @@ namespace CarOwnersTask.Controllers
                 return View(car);
             }
         }
+        //добавление новой машины
         [HttpPost]
         public ActionResult Create(CarViewModel model, int CarTypeId)
         {
             model.Car.CarTypeId = CarTypeId;
             _carRepository.Create(model.Car);
             _carRepository.Save();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index"); //перенаправление на главную страницу со списком
         }
+        //Показывает представление, с запросом на удаление
         public ActionResult Delete(int id)
         {
             
@@ -88,7 +95,7 @@ namespace CarOwnersTask.Controllers
                 return HttpNotFound();
             return View(car);
         }
-        
+        //Удаление машины по ID
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -98,12 +105,14 @@ namespace CarOwnersTask.Controllers
             _carRepository.Save();
             return RedirectToAction("Index");
         }
+        //Удаление владельца машины по ID владельца и ID машины
         public ActionResult DeleteOwner(int ownerId, int carId)
         {
             _carOwnerRepository.DeleteOwnerForCar(carId, ownerId);
             _carOwnerRepository.Save();
             return View("Index",_carRepository.Cars);
         }
+        //Показывает владельцов машины с заданным ID
         public ActionResult Owners(int id)
         {
             CarOwnerViewModel model = new CarOwnerViewModel
@@ -117,6 +126,7 @@ namespace CarOwnersTask.Controllers
        
             return View(model);
         }
+        //Создание владельца для машины по ID
         [HttpPost]
         public ActionResult CreateOwnerForCar(int OwnerId, int carId)
         {
@@ -130,6 +140,7 @@ namespace CarOwnersTask.Controllers
             
             return RedirectToAction("Owners", new { id = carId});
         }
+        //Дочернее действие, которое возвращает частичное представление "Create"
         public PartialViewResult NewCar()
         {
             CarViewModel car = new CarViewModel
@@ -143,6 +154,7 @@ namespace CarOwnersTask.Controllers
 
             return PartialView("Create",car);
         }
+        //Новый владелец
         public PartialViewResult NewOwner(int carId)
         {
             CarOwnerViewModel model = new CarOwnerViewModel

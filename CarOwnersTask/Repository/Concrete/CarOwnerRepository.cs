@@ -8,15 +8,17 @@ using CarOwnersTask.Repository.Interfaces;
 
 namespace CarOwnersTask.Repository.Concrete
 {
+    //Репозиторий для Car-Owner
     public class CarOwnerRepository : ICarOwnerRepository
     {
-        private CarOwnerContext _db;
+        private CarOwnerContext _db; //объект контекста
         public CarOwnerRepository()
         {
             _db = new CarOwnerContext();
         }
-        public IEnumerable<CarOwner> CarOwners => _db.CarOwners.ToList();
-       
+        public IEnumerable<CarOwner> CarOwners => _db.CarOwners.ToList(); //список оъектов CarOwner
+
+        //CRUD-операции
         public void Create(CarOwner item)
         {
             _db.CarOwners.Add(item);
@@ -43,7 +45,6 @@ namespace CarOwnersTask.Repository.Concrete
         {
             _db.SaveChanges();
         }
-
         public void Update(CarOwner item)
         {
             _db.Entry(item).State = System.Data.Entity.EntityState.Modified;

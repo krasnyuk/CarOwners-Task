@@ -31,7 +31,7 @@ namespace CarOwnersTask.Repository.Concrete
                 _db.Owners.Remove(entry);
         }
 
-        public Owner GetCar(int id)
+        public Owner GetOwner(int id)
         {
             return _db.Owners.Find(id);
         }

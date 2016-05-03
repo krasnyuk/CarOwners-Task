@@ -27,8 +27,9 @@ namespace CarOwnersTask.Infrastructure
             return kernel.GetAll(serviceType);
         }
 
-        private void AddBindings()
+        private void AddBindings() 
         {
+            //Создание связей интерфейсов и их реализация для паттерна Репозиторий
             kernel.Bind<ICarRepository>().To<CarRepository>();
             kernel.Bind<ICarTypeRepository>().To<CarTypeRepository>();
             kernel.Bind<IOwnerRepository>().To<OwnerRepository>();
